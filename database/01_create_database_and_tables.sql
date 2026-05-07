@@ -1,5 +1,3 @@
-GO
-
 CREATE DATABASE GymDB;
 GO
 
@@ -11,7 +9,8 @@ CREATE TABLE Employee (
     F_Name VARCHAR(50) NOT NULL,
     L_Name VARCHAR(50) NOT NULL,
     Job_Title VARCHAR(50),
-    Salary DECIMAL(10,2)
+    Salary DECIMAL(10,2),
+    Password VARCHAR(50) NOT NULL DEFAULT '1234'
 );
 
 CREATE TABLE Trainer (
@@ -23,27 +22,27 @@ CREATE TABLE Trainer (
     Start_Date DATE
 );
 
-CREATE TABLE Subscription (
-    Subscription_ID INT PRIMARY KEY,
-    Cost DECIMAL(10,2),
-    Start_Date DATE,
-    End_Date DATE,
-    Employee_ID INT NOT NULL,
-    FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID)
-);
-
 CREATE TABLE Member (
     Member_ID INT PRIMARY KEY,
     F_Name VARCHAR(50) NOT NULL,
     L_Name VARCHAR(50) NOT NULL,
     Age INT,
     Join_Date DATE,
-    Subscription_ID INT UNIQUE,
     Trainer_ID INT,
     Session_Time VARCHAR(50),
     Goal VARCHAR(100),
-    FOREIGN KEY (Subscription_ID) REFERENCES Subscription(Subscription_ID),
     FOREIGN KEY (Trainer_ID) REFERENCES Trainer(Trainer_ID)
+);
+
+CREATE TABLE Subscription (
+    Subscription_ID INT PRIMARY KEY,
+    Cost DECIMAL(10,2),
+    Start_Date DATE,
+    End_Date DATE,
+    Employee_ID INT NOT NULL,
+    Member_ID INT NULL,
+    FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID),
+    FOREIGN KEY (Member_ID) REFERENCES Member(Member_ID)
 );
 
 CREATE TABLE Member_Phones (
@@ -101,3 +100,4 @@ CREATE TABLE Requires (
     FOREIGN KEY (Machine_ID) REFERENCES Machine(Machine_ID),
     FOREIGN KEY (Sport_ID) REFERENCES Sport(Sport_ID)
 );
+GO

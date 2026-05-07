@@ -16,15 +16,15 @@ INSERT INTO Sport VALUES
 (2, 'Cardio'),
 (3, 'Boxing');
 
-INSERT INTO Subscription VALUES
-(1, 500, '2025-01-01', '2025-02-01', 1),
-(2, 1200, '2025-01-05', '2025-04-05', 2),
-(3, 2200, '2025-02-01', '2025-08-01', 1);
-
 INSERT INTO Member VALUES
-(1, 'Ali', 'Mostafa', 22, '2025-01-01', 1, 1, '10:00 AM', 'Build muscle'),
-(2, 'Nada', 'Hany', 24, '2025-01-05', 2, 2, '6:00 PM', 'Lose weight'),
-(3, 'Mina', 'George', 21, '2025-02-01', 3, 3, '8:00 PM', 'Improve fitness');
+(1, 'Ali', 'Mostafa', 22, '2025-01-01', 1, '10:00 AM', 'Build muscle'),
+(2, 'Nada', 'Hany', 24, '2025-01-05', 2, '6:00 PM', 'Lose weight'),
+(3, 'Mina', 'George', 21, '2025-02-01', 3, '8:00 PM', 'Improve fitness');
+
+INSERT INTO Subscription VALUES
+(1, 500, '2025-01-01', '2025-02-01', 1, 1),
+(2, 1200, '2025-01-05', '2025-04-05', 2, 2),
+(3, 2200, '2025-02-01', '2025-08-01', 1, 3);
 
 INSERT INTO Member_Phones VALUES
 (1, '01011111111'),
