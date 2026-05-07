@@ -46,6 +46,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployeesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmployeesForm.Designer.cs">
+      <DependentUpon>EmployeesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MemberPhonesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MemberPhonesForm.Designer.cs">
+      <DependentUpon>MemberPhonesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MaintenanceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MaintenanceForm.Designer.cs">
+      <DependentUpon>MaintenanceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PracticesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PracticesForm.Designer.cs">
+      <DependentUpon>PracticesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MachinesForm.cs">
       <SubType>Form</SubType>
     </Compile>
