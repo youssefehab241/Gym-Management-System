@@ -240,17 +240,17 @@ namespace GymManagementSystem
 
         private void Add()
         {
-            if (txtEmpID.Text == "" || txtFName.Text == "" || txtLName.Text == "")
+            if (txtFName.Text == "" || txtLName.Text == "")
             { 
-                MessageBox.Show("Fill ID, First Name, and Last Name.");
+                MessageBox.Show("Fill at least the First Name and Last Name.");
                 return; 
             }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Employee (Employee_ID, F_Name, L_Name, Job_Title, Salary, Password) VALUES (@ID, @FN, @LN, @Job, @Sal, @Pass)", con);
-                cmd.Parameters.AddWithValue("@ID", int.Parse(txtEmpID.Text));
+                SqlCommand cmd = new SqlCommand("INSERT INTO Employee (F_Name, L_Name, Job_Title, Salary, Password) VALUES (@FN, @LN, @Job, @Sal, @Pass)", con);
+                //cmd.Parameters.AddWithValue("@ID", int.Parse(txtEmpID.Text));
                 cmd.Parameters.AddWithValue("@FN", txtFName.Text);
                 cmd.Parameters.AddWithValue("@LN", txtLName.Text);
                 cmd.Parameters.AddWithValue("@Job", txtJobTitle.Text);

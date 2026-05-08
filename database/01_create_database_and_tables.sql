@@ -5,7 +5,7 @@ USE GymDB;
 GO
 
 CREATE TABLE Employee (
-    Employee_ID INT PRIMARY KEY,
+    Employee_ID INT IDENTITY(1,1) PRIMARY KEY,
     F_Name VARCHAR(50) NOT NULL,
     L_Name VARCHAR(50) NOT NULL,
     Job_Title VARCHAR(50),
@@ -14,7 +14,7 @@ CREATE TABLE Employee (
 );
 
 CREATE TABLE Trainer (
-    Trainer_ID INT PRIMARY KEY,
+    Trainer_ID INT IDENTITY(1,1) PRIMARY KEY,
     F_Name VARCHAR(50) NOT NULL,
     L_Name VARCHAR(50) NOT NULL,
     Salary DECIMAL(10,2),
@@ -23,7 +23,7 @@ CREATE TABLE Trainer (
 );
 
 CREATE TABLE Member (
-    Member_ID INT PRIMARY KEY,
+    Member_ID INT IDENTITY(1,1) PRIMARY KEY,
     F_Name VARCHAR(50) NOT NULL,
     L_Name VARCHAR(50) NOT NULL,
     Age INT,
@@ -35,7 +35,7 @@ CREATE TABLE Member (
 );
 
 CREATE TABLE Subscription (
-    Subscription_ID INT PRIMARY KEY,
+    Subscription_ID INT IDENTITY(1,1) PRIMARY KEY,
     Cost DECIMAL(10,2),
     Start_Date DATE,
     End_Date DATE,
@@ -53,12 +53,12 @@ CREATE TABLE Member_Phones (
 );
 
 CREATE TABLE Sport (
-    Sport_ID INT PRIMARY KEY,
+    Sport_ID INT IDENTITY(1,1) PRIMARY KEY,
     Sport_Name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Machine (
-    Machine_ID INT PRIMARY KEY,
+    Machine_ID INT IDENTITY(1,1) PRIMARY KEY,
     Machine_Name VARCHAR(50) NOT NULL,
     Usage VARCHAR(100),
     Purchase_Date DATE,
