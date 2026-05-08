@@ -64,9 +64,11 @@ Before running the project, make sure you have:
 
 1. **Visual Studio Community 2022** or later
 2. The Visual Studio workload:
-   ```text
-   .NET desktop development
-   ```
+
+```text
+.NET desktop development
+```
+
 3. **SQL Server**
 4. **SQL Server Management Studio (SSMS)**
 
@@ -94,22 +96,35 @@ and insert sample data for testing.
 
 The application connects to SQL Server using a connection string inside the C# forms.
 
-In our local setup, the SQL Server name is:
+The current default connection string in the project is:
+
+```csharp
+string connectionString =
+    @"Data Source=X\SQLEXPRESS;Initial Catalog=GymDB;Integrated Security=True;TrustServerCertificate=True";
+```
+
+This means the project is currently configured to connect to a SQL Server instance named:
+
+```text
+X\SQLEXPRESS
+```
+
+If your SQL Server instance has a different name, you must update the connection string before running the project.
+
+For example, if your SQL Server in SSMS appears as:
 
 ```text
 localhost
 ```
 
-So the connection string looks like this:
+then change the connection string to:
 
 ```csharp
 string connectionString =
     @"Data Source=localhost;Initial Catalog=GymDB;Integrated Security=True;TrustServerCertificate=True";
 ```
 
-If your SQL Server name is different, you must update the connection string.
-
-For example, if your server name in SSMS is:
+If your SQL Server in SSMS appears as:
 
 ```text
 DESKTOP-ABC\SQLEXPRESS
@@ -124,13 +139,17 @@ string connectionString =
 
 You can find your SQL Server name at the top of **Object Explorer** in SSMS.
 
-Search in Visual Studio for:
+To update it in Visual Studio:
+
+1. Press `Ctrl + Shift + F`.
+2. Search for:
 
 ```text
 Data Source
 ```
 
-and update all connection strings if needed.
+3. Replace the existing server name with your own SQL Server name.
+4. Save all files.
 
 ---
 
@@ -249,16 +268,16 @@ Do not randomly change control names unless you also update the related C# code.
 
 ## Git Workflow
 
+Before starting new work, always pull the latest version:
+
+```bash
+git pull origin main
+```
+
 After making changes:
 
 ```bash
 git add .
 git commit -m "Describe your changes"
 git push
-```
-
-Before starting new work, always pull the latest version:
-
-```bash
-git pull origin main
 ```
