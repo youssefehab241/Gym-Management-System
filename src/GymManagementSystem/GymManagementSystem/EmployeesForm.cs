@@ -46,22 +46,28 @@ namespace GymManagementSystem
             int leftX = 30, rightX = 440, y = 90, h = 45, lw = 120, iw = 200;
 
             this.Controls.Add(MakeLabel("Employee ID", leftX, y));
-            txtEmpID = MakeTextBox(leftX + lw + 5, y, iw); this.Controls.Add(txtEmpID);
+            txtEmpID = MakeTextBox(leftX + lw + 5, y, iw); 
+            this.Controls.Add(txtEmpID);
 
             this.Controls.Add(MakeLabel("First Name", leftX, y + h));
-            txtFName = MakeTextBox(leftX + lw + 5, y + h, iw); this.Controls.Add(txtFName);
+            txtFName = MakeTextBox(leftX + lw + 5, y + h, iw);
+            this.Controls.Add(txtFName);
 
             this.Controls.Add(MakeLabel("Last Name", leftX, y + h * 2));
-            txtLName = MakeTextBox(leftX + lw + 5, y + h * 2, iw); this.Controls.Add(txtLName);
+            txtLName = MakeTextBox(leftX + lw + 5, y + h * 2, iw);
+            this.Controls.Add(txtLName);
 
             this.Controls.Add(MakeLabel("Job Title", leftX, y + h * 3));
-            txtJobTitle = MakeTextBox(leftX + lw + 5, y + h * 3, iw); this.Controls.Add(txtJobTitle);
+            txtJobTitle = MakeTextBox(leftX + lw + 5, y + h * 3, iw); 
+            this.Controls.Add(txtJobTitle);
 
             this.Controls.Add(MakeLabel("Salary", rightX, y));
-            txtSalary = MakeTextBox(rightX + lw + 5, y, iw); this.Controls.Add(txtSalary);
+            txtSalary = MakeTextBox(rightX + lw + 5, y, iw); 
+            this.Controls.Add(txtSalary);
 
             this.Controls.Add(MakeLabel("Password", rightX, y + h));
-            txtPassword = MakeTextBox(rightX + lw + 5, y + h, iw); this.Controls.Add(txtPassword);
+            txtPassword = MakeTextBox(rightX + lw + 5, y + h, iw); 
+            this.Controls.Add(txtPassword);
 
             Label lblCmd = new Label();
             lblCmd.Text = "Select Command:";
@@ -130,15 +136,22 @@ namespace GymManagementSystem
         private TextBox MakeTextBox(int x, int y, int w)
         {
             TextBox txt = new TextBox();
-            txt.Size = new Size(w, 26); txt.Location = new Point(x, y);
-            txt.Font = new Font("Segoe UI", 10); txt.BorderStyle = BorderStyle.FixedSingle;
+            txt.Size = new Size(w, 26); 
+            txt.Location = new Point(x, y);
+            txt.Font = new Font("Segoe UI", 10);
+            txt.BorderStyle = BorderStyle.FixedSingle;
+
             return txt;
         }
 
         private void ClearFields()
         {
-            txtEmpID.Text = ""; txtFName.Text = ""; txtLName.Text = "";
-            txtJobTitle.Text = ""; txtSalary.Text = ""; txtPassword.Text = "";
+            txtEmpID.Text = ""; 
+            txtFName.Text = ""; 
+            txtLName.Text = "";
+            txtJobTitle.Text = "";
+            txtSalary.Text = ""; 
+            txtPassword.Text = "";
         }
 
         private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -154,14 +167,27 @@ namespace GymManagementSystem
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            if (cmbCommands.SelectedItem == null) { MessageBox.Show("Select a command."); return; }
+            if (cmbCommands.SelectedItem == null) { 
+                MessageBox.Show("Select a command.");
+                return;
+            }
             switch (cmbCommands.SelectedItem.ToString())
             {
-                case "View All": ViewAll(); break;
-                case "Search": Search(); break;
-                case "Add Employee": Add(); break;
-                case "Update Employee": Update(); break;
-                case "Delete Employee": Delete(); break;
+                case "View All": 
+                    ViewAll(); 
+                    break;
+                case "Search": 
+                    Search();
+                    break;
+                case "Add Employee": 
+                    Add(); 
+                    break;
+                case "Update Employee": 
+                    Update();
+                    break;
+                case "Delete Employee":
+                    Delete(); 
+                    break;
             }
         }
 
@@ -177,6 +203,7 @@ namespace GymManagementSystem
                 dgv.DataSource = t;
                 con.Close();
                 ClearFields();
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -191,8 +218,14 @@ namespace GymManagementSystem
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = con;
 
-                if (txtEmpID.Text != "") { q += " AND Employee_ID = @ID"; cmd.Parameters.AddWithValue("@ID", int.Parse(txtEmpID.Text)); }
-                if (txtJobTitle.Text != "") { q += " AND Job_Title LIKE @Job"; cmd.Parameters.AddWithValue("@Job", "%" + txtJobTitle.Text + "%"); }
+                if (txtEmpID.Text != "") { 
+                    q += " AND Employee_ID = @ID"; 
+                    cmd.Parameters.AddWithValue("@ID", int.Parse(txtEmpID.Text));
+                }
+                if (txtJobTitle.Text != "") { 
+                    q += " AND Job_Title LIKE @Job"; 
+                    cmd.Parameters.AddWithValue("@Job", "%" + txtJobTitle.Text + "%");
+                }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();
@@ -200,6 +233,7 @@ namespace GymManagementSystem
                 if (t.Rows.Count > 0) dgv.DataSource = t;
                 else MessageBox.Show("Not found.");
                 con.Close();
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -207,7 +241,10 @@ namespace GymManagementSystem
         private void Add()
         {
             if (txtEmpID.Text == "" || txtFName.Text == "" || txtLName.Text == "")
-            { MessageBox.Show("Fill ID, First Name, and Last Name."); return; }
+            { 
+                MessageBox.Show("Fill ID, First Name, and Last Name.");
+                return; 
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -229,7 +266,12 @@ namespace GymManagementSystem
 
         private void Update()
         {
-            if (txtEmpID.Text == "") { MessageBox.Show("Enter Employee ID."); return; }
+            if (dgv.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Select a subscription from the table to update.");
+                return;
+            }
+
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -240,8 +282,12 @@ namespace GymManagementSystem
                 cmd.Parameters.AddWithValue("@LN", txtLName.Text);
                 cmd.Parameters.AddWithValue("@Job", txtJobTitle.Text);
                 cmd.Parameters.AddWithValue("@Sal", txtSalary.Text == "" ? 0 : decimal.Parse(txtSalary.Text));
-                if (cmd.ExecuteNonQuery() > 0) MessageBox.Show("Updated.");
-                else MessageBox.Show("Not found.");
+                
+                if (cmd.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Updated.");
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
                 ViewAll();
             }
@@ -250,8 +296,14 @@ namespace GymManagementSystem
 
         private void Delete()
         {
-            if (txtEmpID.Text == "") { MessageBox.Show("Enter Employee ID."); return; }
-            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
+            if (txtEmpID.Text == "") { 
+                MessageBox.Show("Enter Employee ID."); 
+                return;
+            }
+
+            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) 
+                return;
+
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -266,14 +318,21 @@ namespace GymManagementSystem
 
                 SqlCommand cmd3 = new SqlCommand("DELETE FROM Employee WHERE Employee_ID = @ID", con);
                 cmd3.Parameters.AddWithValue("@ID", id);
-                if (cmd3.ExecuteNonQuery() > 0) MessageBox.Show("Deleted.");
-                else MessageBox.Show("Not found.");
+               
+                if (cmd3.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Deleted.");
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
                 ViewAll();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
 
-        private void btnClear_Click(object sender, EventArgs e) { ClearFields(); dgv.DataSource = null; }
+        private void btnClear_Click(object sender, EventArgs e) { 
+            ClearFields(); 
+            dgv.DataSource = null; 
+        }
     }
 }

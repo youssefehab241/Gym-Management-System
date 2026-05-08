@@ -106,8 +106,10 @@ namespace GymManagementSystem
                 SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Employee_ID = @ID AND Password = @Pass", con);
                 cmd.Parameters.AddWithValue("@ID", int.Parse(txtEmployeeID.Text));
                 cmd.Parameters.AddWithValue("@Pass", txtPassword.Text);
-
-                int count = (int)cmd.ExecuteScalar();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                rdr.Read();
+                int count = rdr.GetInt32(0);
+                rdr.Close();
 
                 con.Close();
 

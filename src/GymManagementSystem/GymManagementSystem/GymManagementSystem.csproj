@@ -64,12 +64,6 @@
     <Compile Include="MaintenanceForm.Designer.cs">
       <DependentUpon>MaintenanceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PracticesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PracticesForm.Designer.cs">
-      <DependentUpon>PracticesForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

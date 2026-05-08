@@ -46,10 +46,12 @@ namespace GymManagementSystem
             int leftX = 30, y = 90, h = 45, lw = 100, iw = 200;
 
             this.Controls.Add(MakeLabel("Sport ID", leftX, y));
-            txtSportID = MakeTextBox(leftX + lw + 5, y, iw); this.Controls.Add(txtSportID);
+            txtSportID = MakeTextBox(leftX + lw + 5, y, iw); 
+            this.Controls.Add(txtSportID);
 
             this.Controls.Add(MakeLabel("Sport Name", leftX, y + h));
-            txtSportName = MakeTextBox(leftX + lw + 5, y + h, iw); this.Controls.Add(txtSportName);
+            txtSportName = MakeTextBox(leftX + lw + 5, y + h, iw); 
+            this.Controls.Add(txtSportName);
 
             Label lblCmd = new Label();
             lblCmd.Text = "Select Command:";
@@ -111,19 +113,27 @@ namespace GymManagementSystem
             Label lbl = new Label();
             lbl.Text = text; lbl.Font = new Font("Segoe UI", 10);
             lbl.ForeColor = Color.FromArgb(80, 80, 100);
-            lbl.Location = new Point(x, y); lbl.AutoSize = true;
+            lbl.Location = new Point(x, y); 
+            lbl.AutoSize = true;
+
             return lbl;
         }
 
         private TextBox MakeTextBox(int x, int y, int w)
         {
             TextBox txt = new TextBox();
-            txt.Size = new Size(w, 26); txt.Location = new Point(x, y);
-            txt.Font = new Font("Segoe UI", 10); txt.BorderStyle = BorderStyle.FixedSingle;
+            txt.Size = new Size(w, 26); 
+            txt.Location = new Point(x, y);
+            txt.Font = new Font("Segoe UI", 10); 
+            txt.BorderStyle = BorderStyle.FixedSingle;
+
             return txt;
         }
 
-        private void ClearFields() { txtSportID.Text = ""; txtSportName.Text = ""; }
+        private void ClearFields() { 
+            txtSportID.Text = ""; 
+            txtSportName.Text = ""; 
+        }
 
         private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -135,14 +145,27 @@ namespace GymManagementSystem
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            if (cmbCommands.SelectedItem == null) { MessageBox.Show("Select a command."); return; }
+            if (cmbCommands.SelectedItem == null) { 
+                MessageBox.Show("Select a command."); 
+                return; 
+            }
             switch (cmbCommands.SelectedItem.ToString())
             {
-                case "View All": ViewAll(); break;
-                case "Search": Search(); break;
-                case "Add Sport": AddSport(); break;
-                case "Update Sport": UpdateSport(); break;
-                case "Delete Sport": DeleteSport(); break;
+                case "View All": 
+                    ViewAll(); 
+                    break;
+                case "Search": 
+                    Search(); 
+                    break;
+                case "Add Sport": 
+                    AddSport(); 
+                    break;
+                case "Update Sport": 
+                    UpdateSport(); 
+                    break;
+                case "Delete Sport": 
+                    DeleteSport(); 
+                    break;
             }
         }
 
@@ -158,6 +181,8 @@ namespace GymManagementSystem
                 dgv.DataSource = t;
                 con.Close();
                 ClearFields();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -172,15 +197,25 @@ namespace GymManagementSystem
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = con;
 
-                if (txtSportID.Text != "") { q += " AND Sport_ID = @ID"; cmd.Parameters.AddWithValue("@ID", int.Parse(txtSportID.Text)); }
-                if (txtSportName.Text != "") { q += " AND Sport_Name LIKE @Name"; cmd.Parameters.AddWithValue("@Name", "%" + txtSportName.Text + "%"); }
+                if (txtSportID.Text != "") { 
+                    q += " AND Sport_ID = @ID"; 
+                    cmd.Parameters.AddWithValue("@ID", int.Parse(txtSportID.Text)); }
+                if (txtSportName.Text != "") { 
+                    q += " AND Sport_Name LIKE @Name"; 
+                    cmd.Parameters.AddWithValue("@Name", "%" + txtSportName.Text + "%"); }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();
                 t.Load(cmd.ExecuteReader());
-                if (t.Rows.Count > 0) dgv.DataSource = t;
-                else MessageBox.Show("Not found.");
+                
+                if (t.Rows.Count > 0) 
+                    dgv.DataSource = t;
+                else 
+                    MessageBox.Show("Not found.");
+
                 con.Close();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -188,7 +223,10 @@ namespace GymManagementSystem
         private void AddSport()
         {
             if (txtSportID.Text == "" || txtSportName.Text == "")
-            { MessageBox.Show("Fill Sport ID and Sport Name."); return; }
+            { 
+                MessageBox.Show("Fill Sport ID and Sport Name.");
+                return;
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -206,8 +244,13 @@ namespace GymManagementSystem
 
         private void UpdateSport()
         {
-            if (txtSportID.Text == "" || txtSportName.Text == "")
-            { MessageBox.Show("Fill Sport ID and Sport Name."); return; }
+
+            if (dgv.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Select a row from the table to update.");
+                return;
+            }
+
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -215,8 +258,12 @@ namespace GymManagementSystem
                 SqlCommand cmd = new SqlCommand("UPDATE Sport SET Sport_Name = @Name WHERE Sport_ID = @ID", con);
                 cmd.Parameters.AddWithValue("@ID", int.Parse(txtSportID.Text));
                 cmd.Parameters.AddWithValue("@Name", txtSportName.Text);
-                if (cmd.ExecuteNonQuery() > 0) MessageBox.Show("Updated.");
-                else MessageBox.Show("Not found.");
+                
+                if (cmd.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Updated.");
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
                 ViewAll();
             }
@@ -225,8 +272,12 @@ namespace GymManagementSystem
 
         private void DeleteSport()
         {
-            if (txtSportID.Text == "") { MessageBox.Show("Enter Sport ID."); return; }
-            if (MessageBox.Show("Delete this sport and all practice records?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
+            if (txtSportID.Text == "") { 
+                MessageBox.Show("Enter Sport ID."); 
+                return; 
+            }
+            if (MessageBox.Show("Delete this sport and all practice records?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) 
+                return;
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -238,14 +289,21 @@ namespace GymManagementSystem
 
                 SqlCommand cmd2 = new SqlCommand("DELETE FROM Sport WHERE Sport_ID = @ID", con);
                 cmd2.Parameters.AddWithValue("@ID", id);
-                if (cmd2.ExecuteNonQuery() > 0) MessageBox.Show("Deleted.");
-                else MessageBox.Show("Not found.");
+                
+                if (cmd2.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Deleted.");
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
                 ViewAll();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
 
-        private void btnClear_Click(object sender, EventArgs e) { ClearFields(); dgv.DataSource = null; }
+        private void btnClear_Click(object sender, EventArgs e) { 
+            ClearFields(); 
+            dgv.DataSource = null; 
+        }
     }
 }

@@ -123,6 +123,8 @@ namespace GymManagementSystem
                 dgv.DataSource = t;
                 reader.Close();
                 con.Close();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex)
             {
@@ -132,7 +134,7 @@ namespace GymManagementSystem
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtPhone.Text))
+            if (txtPhone.Text == "")
             {
                 MessageBox.Show("Enter phone number.");
                 return;

@@ -47,13 +47,16 @@ namespace GymManagementSystem
             int leftX = 30, rightX = 440, y = 90, h = 45, lw = 120, iw = 200;
 
             this.Controls.Add(MakeLabel("Machine ID", leftX, y));
-            txtMachineID = MakeTextBox(leftX + lw + 5, y, iw); this.Controls.Add(txtMachineID);
+            txtMachineID = MakeTextBox(leftX + lw + 5, y, iw); 
+            this.Controls.Add(txtMachineID);
 
             this.Controls.Add(MakeLabel("Machine Name", leftX, y + h));
-            txtMachineName = MakeTextBox(leftX + lw + 5, y + h, iw); this.Controls.Add(txtMachineName);
+            txtMachineName = MakeTextBox(leftX + lw + 5, y + h, iw); 
+            this.Controls.Add(txtMachineName);
 
             this.Controls.Add(MakeLabel("Usage", leftX, y + h * 2));
-            txtUsage = MakeTextBox(leftX + lw + 5, y + h * 2, iw); this.Controls.Add(txtUsage);
+            txtUsage = MakeTextBox(leftX + lw + 5, y + h * 2, iw); 
+            this.Controls.Add(txtUsage);
 
             this.Controls.Add(MakeLabel("Purchase Date", leftX, y + h * 3));
             dtpPurchaseDate = new DateTimePicker();
@@ -63,7 +66,8 @@ namespace GymManagementSystem
             this.Controls.Add(dtpPurchaseDate);
 
             this.Controls.Add(MakeLabel("Employee ID", rightX, y));
-            txtEmployeeID = MakeTextBox(rightX + lw + 5, y, iw); this.Controls.Add(txtEmployeeID);
+            txtEmployeeID = MakeTextBox(rightX + lw + 5, y, iw); 
+            this.Controls.Add(txtEmployeeID);
 
             btnMaintenance = new Button();
             btnMaintenance.Text = "View Maintenance";
@@ -137,6 +141,7 @@ namespace GymManagementSystem
             lbl.Text = text; lbl.Font = new Font("Segoe UI", 10);
             lbl.ForeColor = Color.FromArgb(80, 80, 100);
             lbl.Location = new Point(x, y); lbl.AutoSize = true;
+
             return lbl;
         }
 
@@ -144,37 +149,61 @@ namespace GymManagementSystem
         {
             TextBox txt = new TextBox();
             txt.Size = new Size(w, 26); txt.Location = new Point(x, y);
-            txt.Font = new Font("Segoe UI", 10); txt.BorderStyle = BorderStyle.FixedSingle;
+            txt.Font = new Font("Segoe UI", 10); 
+            txt.BorderStyle = BorderStyle.FixedSingle;
+
             return txt;
         }
 
         private void ClearFields()
         {
-            txtMachineID.Text = ""; txtMachineName.Text = "";
-            txtUsage.Text = ""; txtEmployeeID.Text = "";
+            txtMachineID.Text = ""; 
+            txtMachineName.Text = "";
+            txtUsage.Text = ""; 
+            txtEmployeeID.Text = "";
             dtpPurchaseDate.Value = DateTime.Now;
         }
 
         private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0) 
+                return;
+
             DataGridViewRow row = dgv.Rows[e.RowIndex];
             txtMachineID.Text = row.Cells["Machine_ID"].Value.ToString();
             txtMachineName.Text = row.Cells["Machine_Name"].Value.ToString();
             txtUsage.Text = row.Cells["Usage"].Value.ToString();
             txtEmployeeID.Text = row.Cells["Employee_ID"].Value.ToString();
+
+
+            if (row.Cells["Purchase_Date"].Value != DBNull.Value)
+                dtpPurchaseDate.Value = Convert.ToDateTime(row.Cells["Purchase_Date"].Value);
+
         }
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            if (cmbCommands.SelectedItem == null) { MessageBox.Show("Select a command."); return; }
+            if (cmbCommands.SelectedItem == null) {
+                MessageBox.Show("Select a command.");
+                return; 
+            }
             switch (cmbCommands.SelectedItem.ToString())
             {
-                case "View All": ViewAll(); break;
-                case "Search": Search(); break;
-                case "Add Machine": AddMachine(); break;
-                case "Update Machine": UpdateMachine(); break;
-                case "Delete Machine": DeleteMachine(); break;
+                case "View All": 
+                    ViewAll(); 
+                    break;
+                case "Search": 
+                    Search(); 
+                    break;
+                case "Add Machine": 
+                    AddMachine(); 
+                    break;
+                case "Update Machine": 
+                    UpdateMachine(); 
+                    break;
+                case "Delete Machine": 
+                    DeleteMachine(); 
+                    break;
             }
         }
 
@@ -190,6 +219,8 @@ namespace GymManagementSystem
                 dgv.DataSource = t;
                 con.Close();
                 ClearFields();
+                
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -204,23 +235,40 @@ namespace GymManagementSystem
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = con;
 
-                if (txtMachineID.Text != "") { q += " AND Machine_ID = @ID"; cmd.Parameters.AddWithValue("@ID", int.Parse(txtMachineID.Text)); }
-                if (txtMachineName.Text != "") { q += " AND Machine_Name LIKE @Name"; cmd.Parameters.AddWithValue("@Name", "%" + txtMachineName.Text + "%"); }
+                if (txtMachineID.Text != "") { 
+                    q += " AND Machine_ID = @ID"; 
+                    cmd.Parameters.AddWithValue("@ID", int.Parse(txtMachineID.Text)); 
+                }
+                if (txtMachineName.Text != "") { 
+                    q += " AND Machine_Name LIKE @Name";
+                    cmd.Parameters.AddWithValue("@Name", "%" + txtMachineName.Text + "%");
+                }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();
                 t.Load(cmd.ExecuteReader());
-                if (t.Rows.Count > 0) dgv.DataSource = t;
-                else MessageBox.Show("Not found.");
+
+                if (t.Rows.Count > 0) 
+                    dgv.DataSource = t;
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
+
+                dgv.ClearSelection();
             }
-            catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
+            catch (Exception ex) { 
+                MessageBox.Show("Error:\n" + ex.Message); 
+            }
         }
 
         private void AddMachine()
         {
             if (txtMachineID.Text == "" || txtMachineName.Text == "")
-            { MessageBox.Show("Fill ID and Machine Name."); return; }
+            { 
+                MessageBox.Show("Fill ID and Machine Name."); 
+                return; 
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -230,18 +278,41 @@ namespace GymManagementSystem
                 cmd.Parameters.AddWithValue("@Name", txtMachineName.Text);
                 cmd.Parameters.AddWithValue("@Usage", txtUsage.Text);
                 cmd.Parameters.AddWithValue("@PD", dtpPurchaseDate.Value);
+
+                if (!(txtEmployeeID.Text == ""))
+                {
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Employee_ID = @CheckEID", con);
+                    check.Parameters.AddWithValue("@CheckEID", int.Parse(txtEmployeeID.Text));
+                    SqlDataReader rdr = check.ExecuteReader();
+                    rdr.Read();
+                    int Exists = rdr.GetInt32(0);
+                    rdr.Close();
+                    if (Exists == 0)
+                    {
+                        MessageBox.Show("This Employee ID does not exist. Please enter a valid Employee ID or leave it blank.");
+                        con.Close();
+                        return;
+                    }
+                }
+
                 cmd.Parameters.AddWithValue("@EID", txtEmployeeID.Text == "" ? (object)DBNull.Value : int.Parse(txtEmployeeID.Text));
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Added.");
                 ViewAll();
             }
-            catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
+            catch (Exception ex) { 
+                MessageBox.Show("Error:\n" + ex.Message); 
+            }
         }
 
         private void UpdateMachine()
         {
-            if (txtMachineID.Text == "") { MessageBox.Show("Enter Machine ID."); return; }
+            if (dgv.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Select a subscription from the table to update.");
+                return;
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -252,8 +323,28 @@ namespace GymManagementSystem
                 cmd.Parameters.AddWithValue("@Usage", txtUsage.Text);
                 cmd.Parameters.AddWithValue("@PD", dtpPurchaseDate.Value);
                 cmd.Parameters.AddWithValue("@EID", txtEmployeeID.Text == "" ? (object)DBNull.Value : int.Parse(txtEmployeeID.Text));
-                if (cmd.ExecuteNonQuery() > 0) MessageBox.Show("Updated.");
-                else MessageBox.Show("Not found.");
+                if (!(txtEmployeeID.Text == ""))
+                {
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Employee_ID = @EID", con);
+                    check.Parameters.AddWithValue("@MID", int.Parse(txtEmployeeID.Text));
+                    SqlDataReader rdr = check.ExecuteReader();
+                    rdr.Read();
+                    int Exists = rdr.GetInt32(0);
+
+                    if (Exists == 0)
+                    {
+                        MessageBox.Show("This Employee ID does not exist. Please enter a valid Employee ID or leave it blank.");
+                        con.Close();
+                        return; 
+                    }
+                }
+                //cmd.Parameters.AddWithValue("@EID", txtEmployeeID.Text == "" ? (object)DBNull.Value : int.Parse(txtEmployeeID.Text));
+                
+                if (cmd.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Updated.");
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
                 ViewAll();
             }
@@ -262,8 +353,12 @@ namespace GymManagementSystem
 
         private void DeleteMachine()
         {
-            if (txtMachineID.Text == "") { MessageBox.Show("Enter Machine ID."); return; }
-            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
+            if (txtMachineID.Text == "") {
+                MessageBox.Show("Enter Machine ID.");
+                return; 
+            }
+            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) 
+                return;
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -271,23 +366,34 @@ namespace GymManagementSystem
                 int id = int.Parse(txtMachineID.Text);
 
                 SqlCommand cmd1 = new SqlCommand("DELETE FROM Maintenance WHERE Machine_ID = @ID", con);
-                cmd1.Parameters.AddWithValue("@ID", id); cmd1.ExecuteNonQuery();
+                cmd1.Parameters.AddWithValue("@ID", id); 
+                cmd1.ExecuteNonQuery();
 
                 SqlCommand cmd2 = new SqlCommand("DELETE FROM Machine WHERE Machine_ID = @ID", con);
                 cmd2.Parameters.AddWithValue("@ID", id);
-                if (cmd2.ExecuteNonQuery() > 0) MessageBox.Show("Deleted.");
-                else MessageBox.Show("Not found.");
+                
+                if (cmd2.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Deleted.");
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
                 ViewAll();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
 
-        private void btnClear_Click(object sender, EventArgs e) { ClearFields(); dgv.DataSource = null; }
+        private void btnClear_Click(object sender, EventArgs e) { 
+            ClearFields(); 
+            dgv.DataSource = null; 
+        }
 
         private void btnMaintenance_Click(object sender, EventArgs e)
         {
-            if (txtMachineID.Text == "") { MessageBox.Show("Enter Machine ID first."); return; }
+            if (txtMachineID.Text == "") { 
+                MessageBox.Show("Enter Machine ID first."); 
+                return; 
+            }
             new MaintenanceForm(int.Parse(txtMachineID.Text)).Show();
         }
     }

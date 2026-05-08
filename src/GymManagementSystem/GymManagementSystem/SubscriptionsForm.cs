@@ -47,10 +47,12 @@ namespace GymManagementSystem
             int leftX = 30, rightX = 440, y = 90, h = 45, lw = 120, iw = 200;
 
             this.Controls.Add(MakeLabel("Subscription ID", leftX, y));
-            txtSubID = MakeTextBox(leftX + lw + 5, y, iw); this.Controls.Add(txtSubID);
+            txtSubID = MakeTextBox(leftX + lw + 5, y, iw); 
+            this.Controls.Add(txtSubID);
 
             this.Controls.Add(MakeLabel("Cost", leftX, y + h));
-            txtCost = MakeTextBox(leftX + lw + 5, y + h, iw); this.Controls.Add(txtCost);
+            txtCost = MakeTextBox(leftX + lw + 5, y + h, iw); 
+            this.Controls.Add(txtCost);
 
             this.Controls.Add(MakeLabel("Start Date", leftX, y + h * 2));
             dtpStartDate = new DateTimePicker();
@@ -67,10 +69,12 @@ namespace GymManagementSystem
             this.Controls.Add(dtpEndDate);
 
             this.Controls.Add(MakeLabel("Employee ID", rightX, y));
-            txtEmployeeID = MakeTextBox(rightX + lw + 5, y, iw); this.Controls.Add(txtEmployeeID);
+            txtEmployeeID = MakeTextBox(rightX + lw + 5, y, iw); 
+            this.Controls.Add(txtEmployeeID);
 
             this.Controls.Add(MakeLabel("Member ID", rightX, y + h));
-            txtMemberID = MakeTextBox(rightX + lw + 5, y + h, iw); this.Controls.Add(txtMemberID);
+            txtMemberID = MakeTextBox(rightX + lw + 5, y + h, iw); 
+            this.Controls.Add(txtMemberID);
 
             Label lblCmd = new Label();
             lblCmd.Text = "Select Command:";
@@ -146,31 +150,55 @@ namespace GymManagementSystem
 
         private void ClearFields()
         {
-            txtSubID.Text = ""; txtCost.Text = "";
-            txtEmployeeID.Text = ""; txtMemberID.Text = "";
-            dtpStartDate.Value = DateTime.Now; dtpEndDate.Value = DateTime.Now;
+            txtSubID.Text = ""; 
+            txtCost.Text = "";
+            txtEmployeeID.Text = "";
+            txtMemberID.Text = "";
+            dtpStartDate.Value = DateTime.Now; 
+            dtpEndDate.Value = DateTime.Now;
         }
 
         private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0)
+                return;
+
             DataGridViewRow row = dgv.Rows[e.RowIndex];
             txtSubID.Text = row.Cells["Subscription_ID"].Value.ToString();
             txtCost.Text = row.Cells["Cost"].Value.ToString();
             txtEmployeeID.Text = row.Cells["Employee_ID"].Value.ToString();
             txtMemberID.Text = row.Cells["Member_ID"].Value.ToString();
+
+            if (row.Cells["Start_Date"].Value != DBNull.Value)
+                dtpStartDate.Value = Convert.ToDateTime(row.Cells["Start_Date"].Value);
+
+            if (row.Cells["End_Date"].Value != DBNull.Value)
+                dtpEndDate.Value = Convert.ToDateTime(row.Cells["End_Date"].Value);
         }
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            if (cmbCommands.SelectedItem == null) { MessageBox.Show("Select a command."); return; }
+            if (cmbCommands.SelectedItem == null) { 
+                MessageBox.Show("Select a command."); 
+                return; 
+            }
             switch (cmbCommands.SelectedItem.ToString())
             {
-                case "View All": ViewAll(); break;
-                case "Search": Search(); break;
-                case "Add Subscription": AddSub(); break;
-                case "Update Subscription": UpdateSub(); break;
-                case "Delete Subscription": DeleteSub(); break;
+                case "View All": 
+                    ViewAll(); 
+                    break;
+                case "Search": 
+                    Search(); 
+                    break;
+                case "Add Subscription": 
+                    AddSub(); 
+                    break;
+                case "Update Subscription": 
+                    UpdateSub(); 
+                    break;
+                case "Delete Subscription": 
+                    DeleteSub(); 
+                    break;
             }
         }
 
@@ -186,6 +214,8 @@ namespace GymManagementSystem
                 dgv.DataSource = t;
                 con.Close();
                 ClearFields();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -200,16 +230,31 @@ namespace GymManagementSystem
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = con;
 
-                if (txtSubID.Text != "") { q += " AND Subscription_ID = @ID"; cmd.Parameters.AddWithValue("@ID", int.Parse(txtSubID.Text)); }
-                if (txtMemberID.Text != "") { q += " AND Member_ID = @MID"; cmd.Parameters.AddWithValue("@MID", int.Parse(txtMemberID.Text)); }
-                if (txtEmployeeID.Text != "") { q += " AND Employee_ID = @EID"; cmd.Parameters.AddWithValue("@EID", int.Parse(txtEmployeeID.Text)); }
+                if (txtSubID.Text != "") { 
+                    q += " AND Subscription_ID = @ID"; 
+                    cmd.Parameters.AddWithValue("@ID", int.Parse(txtSubID.Text)); 
+                }
+                if (txtMemberID.Text != "") { 
+                    q += " AND Member_ID = @MID"; 
+                    cmd.Parameters.AddWithValue("@MID", int.Parse(txtMemberID.Text));
+                }
+                if (txtEmployeeID.Text != "") { 
+                    q += " AND Employee_ID = @EID"; 
+                    cmd.Parameters.AddWithValue("@EID", int.Parse(txtEmployeeID.Text)); 
+                }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();
                 t.Load(cmd.ExecuteReader());
-                if (t.Rows.Count > 0) dgv.DataSource = t;
-                else MessageBox.Show("Not found.");
+                
+                if (t.Rows.Count > 0) 
+                    dgv.DataSource = t;
+                else 
+                    MessageBox.Show("Not found.");
+
                 con.Close();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -217,7 +262,10 @@ namespace GymManagementSystem
         private void AddSub()
         {
             if (txtSubID.Text == "" || txtEmployeeID.Text == "")
-            { MessageBox.Show("Fill Subscription ID and Employee ID."); return; }
+            { 
+                MessageBox.Show("Fill Subscription ID and Employee ID."); 
+                return; 
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -229,6 +277,38 @@ namespace GymManagementSystem
                 cmd.Parameters.AddWithValue("@ED", dtpEndDate.Value);
                 cmd.Parameters.AddWithValue("@EID", int.Parse(txtEmployeeID.Text));
                 cmd.Parameters.AddWithValue("@MID", txtMemberID.Text == "" ? (object)DBNull.Value : int.Parse(txtMemberID.Text));
+
+                if (!(txtEmployeeID.Text == ""))
+                {
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Employee_ID = @CheckEID", con);
+                    check.Parameters.AddWithValue("@CheckEID", int.Parse(txtEmployeeID.Text));
+                    SqlDataReader rdr = check.ExecuteReader();
+                    rdr.Read();
+                    int Exists = rdr.GetInt32(0);
+                    rdr.Close();
+                    if (Exists == 0)
+                    {
+                        MessageBox.Show("This Employee ID does not exist. Please enter a valid Employee ID or leave it blank.");
+                        con.Close();
+                        return;
+                    }
+                }
+                if (!(txtMemberID.Text == ""))
+                {
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Member WHERE Member_ID = @CheckMID", con);
+                    check.Parameters.AddWithValue("@CheckMID", int.Parse(txtMemberID.Text));
+                    SqlDataReader rdr = check.ExecuteReader();
+                    rdr.Read();
+                    int Exists = rdr.GetInt32(0);
+                    rdr.Close();
+                    if (Exists == 0)
+                    {
+                        MessageBox.Show("This Member ID does not exist. Please enter a valid Member ID or leave it blank.");
+                        con.Close();
+                        return;
+                    }
+                }
+
                 cmd.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Added.");
@@ -239,20 +319,60 @@ namespace GymManagementSystem
 
         private void UpdateSub()
         {
-            if (txtSubID.Text == "") { MessageBox.Show("Enter Subscription ID."); return; }
+            if (dgv.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Select a subscription from the table to update.");
+                return;
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
+
                 SqlCommand cmd = new SqlCommand("UPDATE Subscription SET Cost=@Cost, Start_Date=@SD, End_Date=@ED, Employee_ID=@EID, Member_ID=@MID WHERE Subscription_ID=@ID", con);
+
                 cmd.Parameters.AddWithValue("@ID", int.Parse(txtSubID.Text));
                 cmd.Parameters.AddWithValue("@Cost", txtCost.Text == "" ? 0 : decimal.Parse(txtCost.Text));
                 cmd.Parameters.AddWithValue("@SD", dtpStartDate.Value);
                 cmd.Parameters.AddWithValue("@ED", dtpEndDate.Value);
                 cmd.Parameters.AddWithValue("@EID", txtEmployeeID.Text == "" ? (object)DBNull.Value : int.Parse(txtEmployeeID.Text));
                 cmd.Parameters.AddWithValue("@MID", txtMemberID.Text == "" ? (object)DBNull.Value : int.Parse(txtMemberID.Text));
-                if (cmd.ExecuteNonQuery() > 0) MessageBox.Show("Updated.");
-                else MessageBox.Show("Not found.");
+
+                if (!(txtEmployeeID.Text == ""))
+                {
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Employee_ID = @CheckEID", con);
+                    check.Parameters.AddWithValue("@CheckEID", int.Parse(txtEmployeeID.Text));
+                    SqlDataReader rdr = check.ExecuteReader();
+                    rdr.Read();
+                    int Exists = rdr.GetInt32(0);
+                    rdr.Close();
+                    if (Exists == 0)
+                    {
+                        MessageBox.Show("This Employee ID does not exist. Please enter a valid Employee ID or leave it blank.");
+                        con.Close();
+                        return;
+                    }
+                }
+                if (!(txtMemberID.Text == ""))
+                {
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Member WHERE Member_ID = @CheckMID", con);
+                    check.Parameters.AddWithValue("@CheckMID", int.Parse(txtMemberID.Text));
+                    SqlDataReader rdr = check.ExecuteReader();
+                    rdr.Read();
+                    int Exists = rdr.GetInt32(0);
+                    rdr.Close();
+                    if (Exists == 0)
+                    {
+                        MessageBox.Show("This Member ID does not exist. Please enter a valid Member ID or leave it blank.");
+                        con.Close();
+                        return;
+                    }
+                }
+                if (cmd.ExecuteNonQuery() > 0)
+                    MessageBox.Show("Updated.");
+                else
+                    MessageBox.Show("Not found.");
+
                 con.Close();
                 ViewAll();
             }
@@ -261,22 +381,35 @@ namespace GymManagementSystem
 
         private void DeleteSub()
         {
-            if (txtSubID.Text == "") { MessageBox.Show("Enter Subscription ID."); return; }
-            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
+            if (txtSubID.Text == "") { 
+                MessageBox.Show("Enter Subscription ID."); 
+                return; 
+            }
+            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) 
+                return;
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
                 SqlCommand cmd = new SqlCommand("DELETE FROM Subscription WHERE Subscription_ID = @ID", con);
+                
                 cmd.Parameters.AddWithValue("@ID", int.Parse(txtSubID.Text));
-                if (cmd.ExecuteNonQuery() > 0) MessageBox.Show("Deleted.");
-                else MessageBox.Show("Not found.");
+                
+                if (cmd.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Deleted.");
+                else 
+                    MessageBox.Show("Not found.");
+
                 con.Close();
                 ViewAll();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
 
-        private void btnClear_Click(object sender, EventArgs e) { ClearFields(); dgv.DataSource = null; }
+        private void btnClear_Click(object sender, EventArgs e) 
+        { 
+            ClearFields(); 
+            dgv.DataSource = null; 
+        }
     }
 }

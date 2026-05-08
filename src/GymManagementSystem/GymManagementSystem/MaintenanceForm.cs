@@ -145,6 +145,8 @@ namespace GymManagementSystem
                 dgv.DataSource = t;
                 reader.Close();
                 con.Close();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex)
             {
