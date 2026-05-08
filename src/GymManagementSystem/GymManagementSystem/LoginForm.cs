@@ -92,7 +92,7 @@ namespace GymManagementSystem
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtEmployeeID.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
+            if (txtEmployeeID.Text == "" || txtPassword.Text == "")
             {
                 MessageBox.Show("Enter ID and Password.");
                 return;

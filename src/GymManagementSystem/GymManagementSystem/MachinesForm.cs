@@ -330,7 +330,7 @@ namespace GymManagementSystem
                     SqlDataReader rdr = check.ExecuteReader();
                     rdr.Read();
                     int Exists = rdr.GetInt32(0);
-
+                    rdr.Close();
                     if (Exists == 0)
                     {
                         MessageBox.Show("This Employee ID does not exist. Please enter a valid Employee ID or leave it blank.");
