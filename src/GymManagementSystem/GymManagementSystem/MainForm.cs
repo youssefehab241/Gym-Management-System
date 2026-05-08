@@ -145,8 +145,19 @@ namespace GymManagementSystem
             btn.Cursor = Cursors.Hand;
             btn.TextAlign = ContentAlignment.MiddleLeft;
             btn.Padding = new Padding(20, 0, 0, 0);
-            btn.MouseEnter += (s, e) => { btn.BackColor = Color.FromArgb(35, 35, 55); btn.ForeColor = Color.FromArgb(0, 200, 160); btn.FlatAppearance.BorderColor = Color.FromArgb(35, 35, 55); };
-            btn.MouseLeave += (s, e) => { btn.BackColor = Color.White; btn.ForeColor = Color.FromArgb(40, 40, 60); btn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 210); };
+
+            btn.MouseEnter += (s, e) => { 
+                btn.BackColor = Color.FromArgb(35, 35, 55); 
+                btn.ForeColor = Color.FromArgb(0, 200, 160); 
+                btn.FlatAppearance.BorderColor = Color.FromArgb(35, 35, 55);
+            };
+
+            btn.MouseLeave += (s, e) => { 
+                btn.BackColor = Color.White; 
+                btn.ForeColor = Color.FromArgb(40, 40, 60); 
+                btn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 210);
+            };
+
             return btn;
         }
     }

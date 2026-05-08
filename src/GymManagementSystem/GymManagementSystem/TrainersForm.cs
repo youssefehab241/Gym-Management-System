@@ -48,13 +48,16 @@ namespace GymManagementSystem
             int leftX = 30, rightX = 440, y = 90, h = 45, lw = 120, iw = 200;
 
             this.Controls.Add(MakeLabel("Trainer ID", leftX, y));
-            txtTrainerID = MakeTextBox(leftX + lw + 5, y, iw); this.Controls.Add(txtTrainerID);
+            txtTrainerID = MakeTextBox(leftX + lw + 5, y, iw); 
+            this.Controls.Add(txtTrainerID);
 
             this.Controls.Add(MakeLabel("First Name", leftX, y + h));
-            txtFName = MakeTextBox(leftX + lw + 5, y + h, iw); this.Controls.Add(txtFName);
+            txtFName = MakeTextBox(leftX + lw + 5, y + h, iw); 
+            this.Controls.Add(txtFName);
 
             this.Controls.Add(MakeLabel("Last Name", leftX, y + h * 2));
-            txtLName = MakeTextBox(leftX + lw + 5, y + h * 2, iw); this.Controls.Add(txtLName);
+            txtLName = MakeTextBox(leftX + lw + 5, y + h * 2, iw); 
+            this.Controls.Add(txtLName);
 
             this.Controls.Add(MakeLabel("Start Date", leftX, y + h * 3));
             dtpStartDate = new DateTimePicker();
@@ -64,10 +67,12 @@ namespace GymManagementSystem
             this.Controls.Add(dtpStartDate);
 
             this.Controls.Add(MakeLabel("Salary", rightX, y));
-            txtSalary = MakeTextBox(rightX + lw + 5, y, iw); this.Controls.Add(txtSalary);
+            txtSalary = MakeTextBox(rightX + lw + 5, y, iw); 
+            this.Controls.Add(txtSalary);
 
             this.Controls.Add(MakeLabel("Experience", rightX, y + h));
-            txtExperience = MakeTextBox(rightX + lw + 5, y + h, iw); this.Controls.Add(txtExperience);
+            txtExperience = MakeTextBox(rightX + lw + 5, y + h, iw); 
+            this.Controls.Add(txtExperience);
 
             Label lblCmd = new Label();
             lblCmd.Text = "Select Command:";
@@ -147,8 +152,11 @@ namespace GymManagementSystem
 
         private void ClearFields()
         {
-            txtTrainerID.Text = ""; txtFName.Text = ""; txtLName.Text = "";
-            txtSalary.Text = ""; txtExperience.Text = "";
+            txtTrainerID.Text = ""; 
+            txtFName.Text = ""; 
+            txtLName.Text = "";
+            txtSalary.Text = ""; 
+            txtExperience.Text = "";
             dtpStartDate.Value = DateTime.Now;
         }
 
@@ -161,18 +169,35 @@ namespace GymManagementSystem
             txtLName.Text = row.Cells["L_Name"].Value.ToString();
             txtSalary.Text = row.Cells["Salary"].Value.ToString();
             txtExperience.Text = row.Cells["Experience"].Value.ToString();
+
+            if (row.Cells["Start_Date"].Value != DBNull.Value)
+                dtpStartDate.Value = Convert.ToDateTime(row.Cells["Start_Date"].Value);
+
         }
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
-            if (cmbCommands.SelectedItem == null) { MessageBox.Show("Select a command."); return; }
+            if (cmbCommands.SelectedItem == null) { 
+                MessageBox.Show("Select a command.");
+                return; 
+            }
             switch (cmbCommands.SelectedItem.ToString())
             {
-                case "View All": ViewAll(); break;
-                case "Search": Search(); break;
-                case "Add Trainer": AddTrainer(); break;
-                case "Update Trainer": UpdateTrainer(); break;
-                case "Delete Trainer": DeleteTrainer(); break;
+                case "View All": 
+                    ViewAll(); 
+                    break;
+                case "Search": 
+                    Search(); 
+                    break;
+                case "Add Trainer": 
+                    AddTrainer(); 
+                    break;
+                case "Update Trainer": 
+                    UpdateTrainer(); 
+                    break;
+                case "Delete Trainer": 
+                    DeleteTrainer(); 
+                    break;
             }
         }
 
@@ -188,6 +213,8 @@ namespace GymManagementSystem
                 dgv.DataSource = t;
                 con.Close();
                 ClearFields();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -202,15 +229,26 @@ namespace GymManagementSystem
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = con;
 
-                if (txtTrainerID.Text != "") { q += " AND Trainer_ID = @ID"; cmd.Parameters.AddWithValue("@ID", int.Parse(txtTrainerID.Text)); }
-                if (txtFName.Text != "") { q += " AND F_Name LIKE @FN"; cmd.Parameters.AddWithValue("@FN", "%" + txtFName.Text + "%"); }
+                if (txtTrainerID.Text != "") { 
+                    q += " AND Trainer_ID = @ID"; 
+                    cmd.Parameters.AddWithValue("@ID", int.Parse(txtTrainerID.Text)); 
+                }
+                if (txtFName.Text != "") { 
+                    q += " AND F_Name LIKE @FN"; 
+                    cmd.Parameters.AddWithValue("@FN", "%" + txtFName.Text + "%");
+                }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();
                 t.Load(cmd.ExecuteReader());
-                if (t.Rows.Count > 0) dgv.DataSource = t;
+                
+                if (t.Rows.Count > 0) 
+                    dgv.DataSource = t;
                 else MessageBox.Show("Not found.");
+
                 con.Close();
+
+                dgv.ClearSelection();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
@@ -218,7 +256,10 @@ namespace GymManagementSystem
         private void AddTrainer()
         {
             if (txtTrainerID.Text == "" || txtFName.Text == "" || txtLName.Text == "")
-            { MessageBox.Show("Fill ID, First Name, and Last Name."); return; }
+            { 
+                MessageBox.Show("Fill ID, First Name, and Last Name."); 
+                return; 
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -227,7 +268,9 @@ namespace GymManagementSystem
                 if (string.IsNullOrWhiteSpace(txtTrainerID.Text))
                 {
                     SqlCommand cmdMax = new SqlCommand("SELECT ISNULL(MAX(Trainer_ID), 0) + 1 FROM Trainer", con);
-                    newID = (int)cmdMax.ExecuteScalar();
+                    SqlDataReader rdr = cmdMax.ExecuteReader();
+                    rdr.Read();
+                    newID = rdr.GetInt32(0);
                 }
                 else
                     newID = int.Parse(txtTrainerID.Text);
@@ -249,41 +292,50 @@ namespace GymManagementSystem
 
         private void UpdateTrainer()
         {
-            if (txtTrainerID.Text == "") { MessageBox.Show("Enter Trainer ID."); return; }
+            if (dgv.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Select a trainer from the table to update.");
+                return;
+            }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
-                string q = "UPDATE Trainer SET ";
-                List<string> u = new List<string>();
-                List<SqlParameter> p = new List<SqlParameter>();
+                SqlCommand cmd = new SqlCommand("UPDATE Trainer SET F_Name=@FName, L_Name=@LName, Salary=@Salary, Experience=@Experience WHERE Trainer_ID=@ID", con);
 
-                if (!string.IsNullOrWhiteSpace(txtFName.Text)) { u.Add("F_Name = @F_Name"); p.Add(new SqlParameter("@F_Name", txtFName.Text)); }
-                if (!string.IsNullOrWhiteSpace(txtLName.Text)) { u.Add("L_Name = @L_Name"); p.Add(new SqlParameter("@L_Name", txtLName.Text)); }
-                if (!string.IsNullOrWhiteSpace(txtSalary.Text)) { u.Add("Salary = @Salary"); p.Add(new SqlParameter("@Salary", decimal.Parse(txtSalary.Text))); }
-                if (!string.IsNullOrWhiteSpace(txtExperience.Text)) { u.Add("Experience = @Experience"); p.Add(new SqlParameter("@Experience", int.Parse(txtExperience.Text))); }
+                cmd.Parameters.AddWithValue("@ID", int.Parse(txtTrainerID.Text));
 
-                if (u.Count == 0) { MessageBox.Show("Fill at least one field."); con.Close(); return; }
+                cmd.Parameters.AddWithValue("@FName", txtFName.Text == "" ? (object)DBNull.Value : txtFName.Text);
+                cmd.Parameters.AddWithValue("@LName", txtLName.Text == "" ? (object)DBNull.Value : txtLName.Text);
 
-                q += string.Join(", ", u) + " WHERE Trainer_ID = @Trainer_ID";
-                p.Add(new SqlParameter("@Trainer_ID", int.Parse(txtTrainerID.Text)));
+                cmd.Parameters.AddWithValue("@Salary", txtSalary.Text == "" ? 0 : decimal.Parse(txtSalary.Text));
+                cmd.Parameters.AddWithValue("@Experience", txtExperience.Text == "" ? 0 : int.Parse(txtExperience.Text));
 
-                SqlCommand cmd = new SqlCommand(q, con);
-                for (int i = 0; i < p.Count; i++)
-                    cmd.Parameters.Add(p[i]);
+                if (cmd.ExecuteNonQuery() > 0)
+                    MessageBox.Show("Trainer updated.");
+                else
+                    MessageBox.Show("Trainer ID not found.");
 
-                if (cmd.ExecuteNonQuery() > 0) { MessageBox.Show("Trainer updated."); ViewAll(); }
-                else MessageBox.Show("Trainer ID not found.");
                 con.Close();
                 ViewAll();
             }
-            catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error:\n" + ex.Message);
+            }
         }
+
 
         private void DeleteTrainer()
         {
-            if (txtTrainerID.Text == "") { MessageBox.Show("Enter Trainer ID."); return; }
-            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
+            if (txtTrainerID.Text == "") { 
+                MessageBox.Show("Enter Trainer ID."); 
+                return; 
+            }
+
+            if (MessageBox.Show("Delete?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes) 
+                return;
+
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -291,18 +343,26 @@ namespace GymManagementSystem
                 int id = int.Parse(txtTrainerID.Text);
 
                 SqlCommand cmd1 = new SqlCommand("UPDATE Member SET Trainer_ID = NULL WHERE Trainer_ID = @ID", con);
-                cmd1.Parameters.AddWithValue("@ID", id); cmd1.ExecuteNonQuery();
+                cmd1.Parameters.AddWithValue("@ID", id); 
+                cmd1.ExecuteNonQuery();
 
                 SqlCommand cmd2 = new SqlCommand("DELETE FROM Trainer WHERE Trainer_ID = @ID", con);
                 cmd2.Parameters.AddWithValue("@ID", id);
-                if (cmd2.ExecuteNonQuery() > 0) MessageBox.Show("Deleted.");
-                else MessageBox.Show("Not found.");
+                
+                if (cmd2.ExecuteNonQuery() > 0) 
+                    MessageBox.Show("Deleted.");
+                else 
+                    MessageBox.Show("Not found.");
+
                 con.Close();
                 ViewAll();
             }
             catch (Exception ex) { MessageBox.Show("Error:\n" + ex.Message); }
         }
 
-        private void btnClear_Click(object sender, EventArgs e) { ClearFields(); dgv.DataSource = null; }
+        private void btnClear_Click(object sender, EventArgs e) { 
+            ClearFields(); 
+            dgv.DataSource = null; 
+        }
     }
 }
