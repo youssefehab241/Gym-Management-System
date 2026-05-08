@@ -222,17 +222,17 @@ namespace GymManagementSystem
 
         private void AddSport()
         {
-            if (txtSportID.Text == "" || txtSportName.Text == "")
+            if (txtSportName.Text == "")
             { 
-                MessageBox.Show("Fill Sport ID and Sport Name.");
+                MessageBox.Show("Fill Sport Name.");
                 return;
             }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Sport (Sport_ID, Sport_Name) VALUES (@ID, @Name)", con);
-                cmd.Parameters.AddWithValue("@ID", int.Parse(txtSportID.Text));
+                SqlCommand cmd = new SqlCommand("INSERT INTO Sport (Sport_Name) VALUES (@Name)", con);
+                //cmd.Parameters.AddWithValue("@ID", int.Parse(txtSportID.Text));
                 cmd.Parameters.AddWithValue("@Name", txtSportName.Text);
                 cmd.ExecuteNonQuery();
                 con.Close();

@@ -291,34 +291,34 @@ namespace GymManagementSystem
 
         private void AddMember()
         {
-            if (txtMemberID.Text == "" || txtFName.Text == "" || txtLName.Text == "" || txtAge.Text == "")
+            if (txtFName.Text == "" || txtLName.Text == "" || txtAge.Text == "")
             { 
-                MessageBox.Show("Fill ID, Name, and Age."); 
+                MessageBox.Show("Fill at least the Name and Age."); 
                 return; 
             }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Member (Member_ID, F_Name, L_Name, Age, Join_Date, Trainer_ID, Session_Time, Goal) VALUES (@ID, @FN, @LN, @Age, @JD, @TID, @ST, @Goal)", con);
-                cmd.Parameters.AddWithValue("@ID", int.Parse(txtMemberID.Text));
+                SqlCommand cmd = new SqlCommand("INSERT INTO Member (F_Name, L_Name, Age, Join_Date, Trainer_ID, Session_Time, Goal) VALUES (@FN, @LN, @Age, @JD, @TID, @ST, @Goal)", con);
+                //cmd.Parameters.AddWithValue("@ID", int.Parse(txtMemberID.Text));
                 cmd.Parameters.AddWithValue("@FN", txtFName.Text);
                 cmd.Parameters.AddWithValue("@LN", txtLName.Text);
                 cmd.Parameters.AddWithValue("@Age", int.Parse(txtAge.Text));
                 cmd.Parameters.AddWithValue("@JD", dtpJoinDate.Value);
                 cmd.Parameters.AddWithValue("@TID", txtTrainerID.Text == "" ? (object)DBNull.Value : int.Parse(txtTrainerID.Text));
-                
+
                 if (!(txtTrainerID.Text == ""))
                 {
-                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Trainer WHERE Trainer_ID = @TID", con);
-                    check.Parameters.AddWithValue("@CheckEID", int.Parse(txtTrainerID.Text));
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Trainer WHERE Trainer_ID = @CheckTID", con);
+                    check.Parameters.AddWithValue("@CheckTID", int.Parse(txtTrainerID.Text));
                     SqlDataReader rdr = check.ExecuteReader();
                     rdr.Read();
                     int Exists = rdr.GetInt32(0);
                     rdr.Close();
                     if (Exists == 0)
                     {
-                        MessageBox.Show("This Employee ID does not exist. Please enter a valid Employee ID or leave it blank.");
+                        MessageBox.Show("This Trainer ID does not exist. Please enter a valid Trainer ID or leave it blank.");
                         con.Close();
                         return;
                     }
@@ -354,15 +354,15 @@ namespace GymManagementSystem
 
                 if (!(txtTrainerID.Text == ""))
                 {
-                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Trainer WHERE Trainer_ID = @TID", con);
-                    check.Parameters.AddWithValue("@CheckEID", int.Parse(txtTrainerID.Text));
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Trainer WHERE Trainer_ID = @CheckTID", con);
+                    check.Parameters.AddWithValue("@CheckTID", int.Parse(txtTrainerID.Text));
                     SqlDataReader rdr = check.ExecuteReader();
                     rdr.Read();
                     int Exists = rdr.GetInt32(0);
                     rdr.Close();
                     if (Exists == 0)
                     {
-                        MessageBox.Show("This Employee ID does not exist. Please enter a valid Employee ID or leave it blank.");
+                        MessageBox.Show("This Trainer ID does not exist. Please enter a valid Trainer ID or leave it blank.");
                         con.Close();
                         return;
                     }

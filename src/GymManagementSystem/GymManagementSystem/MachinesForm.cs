@@ -264,16 +264,16 @@ namespace GymManagementSystem
 
         private void AddMachine()
         {
-            if (txtMachineID.Text == "" || txtMachineName.Text == "")
+            if (txtMachineName.Text == "")
             { 
-                MessageBox.Show("Fill ID and Machine Name."); 
+                MessageBox.Show("Fill at least the Machine Name."); 
                 return; 
             }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Machine (Machine_ID, Machine_Name, Usage, Purchase_Date, Employee_ID) VALUES (@ID, @Name, @Usage, @PD, @EID)", con);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Machine (Machine_Name, Usage, Purchase_Date, Employee_ID) VALUES (@Name, @Usage, @PD, @EID)", con);
                 cmd.Parameters.AddWithValue("@ID", int.Parse(txtMachineID.Text));
                 cmd.Parameters.AddWithValue("@Name", txtMachineName.Text);
                 cmd.Parameters.AddWithValue("@Usage", txtUsage.Text);
@@ -318,15 +318,15 @@ namespace GymManagementSystem
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
                 SqlCommand cmd = new SqlCommand("UPDATE Machine SET Machine_Name=@Name, Usage=@Usage, Purchase_Date=@PD, Employee_ID=@EID WHERE Machine_ID=@ID", con);
-                cmd.Parameters.AddWithValue("@ID", int.Parse(txtMachineID.Text));
+                //cmd.Parameters.AddWithValue("@ID", int.Parse(txtMachineID.Text));
                 cmd.Parameters.AddWithValue("@Name", txtMachineName.Text);
                 cmd.Parameters.AddWithValue("@Usage", txtUsage.Text);
                 cmd.Parameters.AddWithValue("@PD", dtpPurchaseDate.Value);
                 cmd.Parameters.AddWithValue("@EID", txtEmployeeID.Text == "" ? (object)DBNull.Value : int.Parse(txtEmployeeID.Text));
                 if (!(txtEmployeeID.Text == ""))
                 {
-                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Employee_ID = @EID", con);
-                    check.Parameters.AddWithValue("@MID", int.Parse(txtEmployeeID.Text));
+                    SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Employee_ID = @checkEID", con);
+                    check.Parameters.AddWithValue("@checkEID", int.Parse(txtEmployeeID.Text));
                     SqlDataReader rdr = check.ExecuteReader();
                     rdr.Read();
                     int Exists = rdr.GetInt32(0);

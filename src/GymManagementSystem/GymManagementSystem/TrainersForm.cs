@@ -255,28 +255,18 @@ namespace GymManagementSystem
 
         private void AddTrainer()
         {
-            if (txtTrainerID.Text == "" || txtFName.Text == "" || txtLName.Text == "")
+            if (txtFName.Text == "" || txtLName.Text == "")
             { 
-                MessageBox.Show("Fill ID, First Name, and Last Name."); 
+                MessageBox.Show("Fill at least the First Name and Last Name."); 
                 return; 
             }
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
-                int newID = 0;
-                if (string.IsNullOrWhiteSpace(txtTrainerID.Text))
-                {
-                    SqlCommand cmdMax = new SqlCommand("SELECT ISNULL(MAX(Trainer_ID), 0) + 1 FROM Trainer", con);
-                    SqlDataReader rdr = cmdMax.ExecuteReader();
-                    rdr.Read();
-                    newID = rdr.GetInt32(0);
-                }
-                else
-                    newID = int.Parse(txtTrainerID.Text);
 
-                SqlCommand cmd = new SqlCommand("INSERT INTO Trainer (Trainer_ID, F_Name, L_Name, Salary, Experience, Start_Date) VALUES (@Trainer_ID, @F_Name, @L_Name, @Salary, @Experience, @Start_Date)", con);
-                cmd.Parameters.AddWithValue("@Trainer_ID", newID);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Trainer (F_Name, L_Name, Salary, Experience, Start_Date) VALUES (@F_Name, @L_Name, @Salary, @Experience, @Start_Date)", con);
+                //cmd.Parameters.AddWithValue("@Trainer_ID", newID);
                 cmd.Parameters.AddWithValue("@F_Name", txtFName.Text);
                 cmd.Parameters.AddWithValue("@L_Name", txtLName.Text);
                 cmd.Parameters.AddWithValue("@Salary", string.IsNullOrWhiteSpace(txtSalary.Text) ? (object)DBNull.Value : decimal.Parse(txtSalary.Text));
