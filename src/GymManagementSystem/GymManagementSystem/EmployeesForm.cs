@@ -156,7 +156,9 @@ namespace GymManagementSystem
 
         private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0) 
+                return;
+
             DataGridViewRow row = dgv.Rows[e.RowIndex];
             txtEmpID.Text = row.Cells["Employee_ID"].Value.ToString();
             txtFName.Text = row.Cells["F_Name"].Value.ToString();
@@ -226,12 +228,30 @@ namespace GymManagementSystem
                     q += " AND Job_Title LIKE @Job"; 
                     cmd.Parameters.AddWithValue("@Job", "%" + txtJobTitle.Text + "%");
                 }
+                if (txtFName.Text != "")
+                {
+                    q += " AND F_Name LIKE @FN";
+                    cmd.Parameters.AddWithValue("@FN", "%" + txtFName.Text + "%");
+                }
+                if (txtLName.Text != "")
+                {
+                    q += " AND L_Name LIKE @LN";
+                    cmd.Parameters.AddWithValue("@LN", "%" + txtLName.Text + "%");
+                }
+                if (txtSalary.Text != ""){
+                    q += " AND Salary = @Sal";
+                    cmd.Parameters.AddWithValue("@Sal", decimal.Parse(txtSalary.Text));
+                }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();
                 t.Load(cmd.ExecuteReader());
-                if (t.Rows.Count > 0) dgv.DataSource = t;
-                else MessageBox.Show("Not found.");
+                
+                if (t.Rows.Count > 0) 
+                    dgv.DataSource = t;
+                else 
+                    MessageBox.Show("Not found.");
+                
                 con.Close();
                 dgv.ClearSelection();
             }
@@ -268,7 +288,7 @@ namespace GymManagementSystem
         {
             if (dgv.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Select a subscription from the table to update.");
+                MessageBox.Show("Select a Employee from the table to update.");
                 return;
             }
 

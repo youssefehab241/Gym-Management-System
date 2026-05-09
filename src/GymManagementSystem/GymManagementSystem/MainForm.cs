@@ -48,7 +48,10 @@ namespace GymManagementSystem
             Panel card3 = MakeStatCard("Subscriptions", startX + (cardW + gap) * 2, cardY, cardW, cardH, out Label lblSubs);
             Panel card4 = MakeStatCard("Machines", startX + (cardW + gap) * 3, cardY, cardW, cardH, out Label lblMachines);
 
-            this.Controls.Add(card1); this.Controls.Add(card2); this.Controls.Add(card3); this.Controls.Add(card4);
+            this.Controls.Add(card1); 
+            this.Controls.Add(card2); 
+            this.Controls.Add(card3); 
+            this.Controls.Add(card4);
 
             // Navigation Buttons
             int startY = 210;
@@ -122,12 +125,17 @@ namespace GymManagementSystem
         private void GetCount(SqlConnection con, string query, string controlName)
         {
             SqlCommand cmd = new SqlCommand(query, con);
-            int count = (int)cmd.ExecuteScalar();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            rdr.Read();
+            int count = rdr.GetInt32(0);
+            rdr.Close();
+
             foreach (Control c in this.Controls)
             {
                 if (c is Panel panel)
                     foreach (Control inner in panel.Controls)
-                        if (inner.Name == controlName) inner.Text = count.ToString();
+                        if (inner.Name == controlName) 
+                            inner.Text = count.ToString();
             }
         }
 

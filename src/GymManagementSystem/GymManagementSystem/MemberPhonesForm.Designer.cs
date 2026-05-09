@@ -2,7 +2,7 @@
 
 namespace GymManagementSystem
 {
-    partial class MemberPhonesForm : Form // غير الاسم حسب الفورم
+    partial class MemberPhonesForm : Form 
     {
         private System.ComponentModel.IContainer components = null;
         protected override void Dispose(bool disposing)
@@ -16,7 +16,7 @@ namespace GymManagementSystem
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(880, 680);
-            this.Name = "MemberPhonesForm"; // غير الاسم حسب الفورم
+            this.Name = "MemberPhonesForm"; 
             this.ResumeLayout(false);
         }
     }
