@@ -39,7 +39,7 @@ CREATE TABLE Subscription (
     Cost DECIMAL(10,2),
     Start_Date DATE,
     End_Date DATE,
-    Employee_ID INT NOT NULL,
+    Employee_ID INT NULL,
     Member_ID INT NULL,
     FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID),
     FOREIGN KEY (Member_ID) REFERENCES Member(Member_ID)
