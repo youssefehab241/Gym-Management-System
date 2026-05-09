@@ -237,6 +237,14 @@ namespace GymManagementSystem
                     q += " AND F_Name LIKE @FN"; 
                     cmd.Parameters.AddWithValue("@FN", "%" + txtFName.Text + "%");
                 }
+                if (txtSalary.Text != "") { 
+                    q+= " AND Salary = @Salary";
+                    cmd.Parameters.AddWithValue("@Salary", decimal.Parse(txtSalary.Text));
+                }
+                if (txtExperience.Text != "") { 
+                    q+= " AND Experience = @Exp";
+                    cmd.Parameters.AddWithValue("@Exp", int.Parse(txtExperience.Text));
+                }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();

@@ -227,6 +227,7 @@ namespace GymManagementSystem
 
         private void Search()
         {
+            
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
@@ -242,6 +243,10 @@ namespace GymManagementSystem
                 if (txtMachineName.Text != "") { 
                     q += " AND Machine_Name LIKE @Name";
                     cmd.Parameters.AddWithValue("@Name", "%" + txtMachineName.Text + "%");
+                }
+                if (txtEmployeeID.Text != "") {
+                    q += " AND Employee_ID = @EID";
+                    cmd.Parameters.AddWithValue("@EID", int.Parse(txtEmployeeID.Text));
                 }
 
                 cmd.CommandText = q;

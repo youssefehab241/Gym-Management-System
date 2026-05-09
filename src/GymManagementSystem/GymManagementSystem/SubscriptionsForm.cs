@@ -242,6 +242,10 @@ namespace GymManagementSystem
                     q += " AND Employee_ID = @EID"; 
                     cmd.Parameters.AddWithValue("@EID", int.Parse(txtEmployeeID.Text)); 
                 }
+                if (txtCost.Text != ""){
+                    q += " AND Cost = @cost";
+                    cmd.Parameters.AddWithValue("@cost", decimal.Parse(txtCost.Text));
+                }
 
                 cmd.CommandText = q;
                 DataTable t = new DataTable();
